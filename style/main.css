@@ -83,8 +83,10 @@ h2 { font-size: 1em; font-weight: normal; }
 #task-list {
     width: 100%;
     margin: 0 auto;
-    border-spacing: 0px 3px;
+    border-spacing: 0px 10px;
 }
+
+tr#task-0 {}
 
 #no-tasks {
     font-weight: bold;
@@ -112,8 +114,8 @@ td.progress progress { width: 95%; }
 td.drag { width: 10px; }
 td.text { width: 38%; }
 td.options { width: 20%; }
-td.current { width: 10%; }
-td.goal { width: 10%; }
+td.current { width: 9%; }
+td.goal { width: 9%; }
 td.progress { width: 20%; }
 
 .editing-current td.text, .editing-goal td.text { width: 28%; }

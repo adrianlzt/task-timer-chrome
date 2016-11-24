@@ -263,6 +263,21 @@ function toggle_task(task, update) {
 // Add the task to the list
 function list_task(task, anim) {
     try {
+        // Handle real time
+        // The base time is defined by the first task or the running one (TODO: several running)
+        var start;
+        if (task == 0 || tasks[task].last_tick) {
+            start = new Date();
+        } else {
+            start = tasks[task-1].end_time;
+        }
+
+        // Set real start time and end time for tasks
+        tasks[task].start_time = start;
+        var finish = new Date(start.getTime() + tasks[task].goal_hours*60*60*1000 + tasks[task].goal_mins*60*1000 - tasks[task].current_hours*60*60*1000 - tasks[task].current_mins*60*1000 - tasks[task].current_secs*1000);
+        tasks[task].end_time = finish;
+
+
         // Progress done
         var progress = task_progress(task);
 
@@ -272,10 +287,11 @@ function list_task(task, anim) {
 
         // Text
         $('#task-'+ task +' td.text').text(tasks[task].text);
-        $('#task-'+ task +' td.current').text(format_time(tasks[task].current_hours, tasks[task].current_mins, tasks[task].current_secs));
-        $('#task-'+ task +' td.goal').text(format_time(tasks[task].goal_hours, tasks[task].goal_mins, 0, tasks[task].indefinite));
+        $('#task-'+ task +' td.current').text(format_time(tasks[task].current_hours, tasks[task].current_mins, tasks[task].current_secs)+" ("+format_time(tasks[task].start_time.getHours(), tasks[task].start_time.getMinutes(), tasks[task].start_time.getSeconds())+")");
+        $('#task-'+ task +' td.goal').text(format_time(tasks[task].goal_hours, tasks[task].goal_mins, 0, tasks[task].indefinite)+" ("+format_time(tasks[task].end_time.getHours(), tasks[task].end_time.getMinutes(), tasks[task].end_time.getSeconds())+")");
         $('#task-'+ task +' button.toggle').text(tasks[task].last_tick ? locale('btnStop') : locale('btnStart'));
         $('#task-'+ task +' img.toggle').attr('title', tasks[task].last_tick ? locale('btnStop') : locale('btnStart')).attr('src', 'style/images/control_'+ (tasks[task].last_tick ? 'pause' : 'play') +'_blue.png');
+
 
         // Progress bar
         if(!tasks[task].indefinite) {
